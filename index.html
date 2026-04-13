@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adaptive Traffic Signal Optimization System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark">Adaptive Traffic Signal</span>
+        <small>Optimization System</small>
+      </div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#about">About Project</a>
+        <a href="#simulation">Simulation</a>
+        <a href="#visualization">Visualization</a>
+        <a href="#graphs">Graphs</a>
+        <a href="#complexity">Complexity</a>
+        <a href="#team">Team</a>
+      </nav>
+      <div class="top-actions">
+        <button id="modeToggle" class="icon-button" aria-label="toggle theme">Light</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero section" id="home">
+        <div class="hero-copy">
+          <p class="eyebrow">Smart Traffic Control</p>
+          <h1>Adaptive Traffic Signal Optimization System</h1>
+          <p>Dynamic green signal allocation using real-time vehicle count, waiting time and lane priority. Experience Greedy selection, Max Heap scheduling, and DP optimization in an interactive city intersection simulator.</p>
+          <div class="hero-actions">
+            <a href="#simulation" class="primary-btn">Start Simulation</a>
+            <a href="#graphs" class="secondary-btn">View Analytics</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="signal-card">
+            <span>Traffic Flow</span>
+            <div class="signal-grid">
+              <div class="signal light north"><span>N</span></div>
+              <div class="signal light east"><span>E</span></div>
+              <div class="signal light south"><span>S</span></div>
+              <div class="signal light west"><span>W</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section split" id="about">
+        <div class="glass-card about-card">
+          <h2>About the Project</h2>
+          <p>This system models each lane at an intersection using vehicle count, waiting time and priority. The urgency score drives a max heap selection and a multi-cycle optimization to minimize total delay and improve throughput.</p>
+          <ul>
+            <li>Real-time urgency score computation</li>
+            <li>Priority queue scheduling with max heap</li>
+            <li>Greedy lane selection plus dynamic programming optimization</li>
+            <li>Adaptive green duration based on current traffic load</li>
+          </ul>
+        </div>
+        <div class="glass-card workflow-card">
+          <h2>Workflow</h2>
+          <div class="workflow-list">
+            <div><strong>1</strong><span>Traffic Data Input</span></div>
+            <div><strong>2</strong><span>Urgency Score Calculator</span></div>
+            <div><strong>3</strong><span>Priority Queue (Max Heap)</span></div>
+            <div><strong>4</strong><span>Greedy Selection</span></div>
+            <div><strong>5</strong><span>DP Optimization</span></div>
+            <div><strong>6</strong><span>Adaptive Green Output</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="simulation">
+        <div class="section-heading">
+          <h2>Interactive Simulation Panel</h2>
+          <p>Test lane conditions and compare algorithm behavior with live signal control, prediction and history tracking.</p>
+        </div>
+        <div class="simulation-grid">
+          <div class="glass-card sim-panel">
+            <div class="panel-header">
+              <h3>Lane Controls</h3>
+              <button id="randomizeBtn" class="ghost-btn">Random Traffic</button>
+            </div>
+            <div class="lane-inputs"></div>
+            <template id="laneTemplate">
+              <div class="lane-card">
+                <div>
+                  <h4 class="lane-name"></h4>
+                  <div class="tag">Urgency: <span class="lane-urgency">0</span></div>
+                </div>
+                <div class="field-group">
+                  <label>Vehicles</label>
+                  <input type="number" min="0" class="input-vehicles" />
+                </div>
+                <div class="field-group">
+                  <label>Waiting (sec)</label>
+                  <input type="number" min="0" class="input-wait" />
+                </div>
+                <div class="field-group">
+                  <label>Priority</label>
+                  <div class="range-row">
+                    <input type="range" min="1" max="5" class="input-priority" />
+                    <span class="priority-value">3</span>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <div class="action-row">
+              <button id="calculateBtn" class="primary-btn">Calculate Urgency</button>
+              <button id="greedyBtn" class="secondary-btn">Run Greedy</button>
+            </div>
+            <div class="action-row">
+              <button id="dpBtn" class="secondary-btn">Run DP Optimization</button>
+              <button id="fullSimBtn" class="primary-btn">Run Full Simulation</button>
+            </div>
+            <div class="action-row">
+              <button id="resetBtn" class="ghost-btn">Reset</button>
+            </div>
+            <div class="control-panel">
+              <div>
+                <label>Speed</label>
+                <input id="speedControl" type="range" min="0.5" max="2.5" step="0.1" value="1" />
+                <span id="speedLabel">1.0x</span>
+              </div>
+              <div class="toggle-row">
+                <label>Auto Mode</label>
+                <label class="toggle-switch"><input id="autoToggle" type="checkbox" /><span class="slider"></span></label>
+              </div>
+              <div class="toggle-row">
+                <label>Emergency Priority</label>
+                <label class="toggle-switch"><input id="emergencyToggle" type="checkbox" /><span class="slider"></span></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card status-panel">
+            <h3>Adaptive Intersection View</h3>
+            <div class="status-grid">
+              <div class="status-card"><span>Current Lane</span><strong id="selectedLane">Not Selected</strong></div>
+              <div class="status-card"><span>Green Timer</span><strong id="greenTimer">0s</strong></div>
+              <div class="status-card"><span>Best Lane</span><strong id="nextLane">Pending</strong></div>
+              <div class="status-card"><span>Cycles Completed</span><strong id="cycleCount">0</strong></div>
+            </div>
+            <div class="status-message" id="statusMessage">Ready to calculate urgency and optimize traffic flow.</div>
+            <div class="live-visualization">
+              <h4>Live Visualization</h4>
+              <div class="signal-visual">
+                <div class="signal-lane north-lane"><span>N</span></div>
+                <div class="signal-lane east-lane"><span>E</span></div>
+                <div class="signal-lane south-lane"><span>S</span></div>
+                <div class="signal-lane west-lane"><span>W</span></div>
+              </div>
+            </div>
+            <div class="history-block">
+              <h4>Live Lane Metrics</h4>
+              <p class="metrics-subtitle">All simulation decisions are logged below</p>
+              <div class="table-wrapper">
+                <table class="cycle-table">
+                  <thead>
+                    <tr>
+                      <th>Cycle</th>
+                      <th>Method</th>
+                      <th>Selected Lane</th>
+                      <th>Urgency</th>
+                      <th>Green Time</th>
+                      <th>Next Lane</th>
+                      <th>Total Wait</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyList"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section split" id="visualization">
+        <div class="glass-card algo-card">
+          <h2>Algorithm Visualization</h2>
+          <div class="algo-grid">
+            <div class="algo-step"><strong>1.</strong><p>Compute urgency for each lane using <code>vehicles × waiting time × priority</code>.</p></div>
+            <div class="algo-step"><strong>2.</strong><p>Build a priority queue (max heap) to sort lanes by urgency.</p></div>
+            <div class="algo-step"><strong>3.</strong><p>Greedy selection chooses the highest urgency lane for green signal.</p></div>
+            <div class="algo-step"><strong>4.</strong><p>DP optimization evaluates multiple cycles to reduce total waiting time.</p></div>
+            <div class="algo-step"><strong>5.</strong><p>Green time adjusts proportionally to urgency for adaptive performance.</p></div>
+          </div>
+        </div>
+        <div class="glass-card queue-card">
+          <h3>Priority Queue</h3>
+          <div class="queue-visual" id="queueVisual"></div>
+        </div>
+      </section>
+
+      <section class="section" id="graphs">
+        <div class="section-heading">
+          <h2>Performance Comparison Charts</h2>
+          <p>Compare Static, Round Robin and Adaptive strategies across key metrics.</p>
+        </div>
+        <div class="graph-grid">
+          <div class="glass-card chart-card">
+            <h4>Average Waiting Time</h4>
+            <canvas id="waitChart" width="600" height="320"></canvas>
+          </div>
+          <div class="glass-card chart-card">
+            <h4>Throughput & Fuel Use</h4>
+            <canvas id="throughputChart" width="600" height="320"></canvas>
+          </div>
+          <div class="glass-card chart-card">
+            <h4>Cycles Completed</h4>
+            <canvas id="cycleChart" width="600" height="320"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="complexity">
+        <div class="section-heading">
+          <h2>Complexity Analysis</h2>
+          <p>Algorithmic cost and space requirements for the traffic scheduling engine.</p>
+        </div>
+        <div class="complexity-grid">
+          <div class="glass-card complexity-card">
+            <h3>Greedy</h3>
+            <p>Time Complexity</p>
+            <strong>O(n log n)</strong>
+          </div>
+          <div class="glass-card complexity-card">
+            <h3>Priority Queue</h3>
+            <p>Insert / Extract</p>
+            <strong>O(log n)</strong>
+          </div>
+          <div class="glass-card complexity-card">
+            <h3>Dynamic Programming</h3>
+            <p>Multi-cycle optimization</p>
+            <strong>O(n × cycles)</strong>
+          </div>
+          <div class="glass-card complexity-card">
+            <h3>Space Complexity</h3>
+            <p>Auxiliary storage for queue and history</p>
+            <strong>O(n + cycles)</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="team">
+        <div class="section-heading">
+          <h2>Team Members</h2>
+          <p>A collaborative engineering design for intelligent traffic management.</p>
+        </div>
+        <div class="team-grid">
+          <div class="glass-card team-card"><h3>Anushka Rani</h3><p>24BYB0139</p></div>
+          <div class="glass-card team-card"><h3>Anushka Jaiswal</h3><p>24BYB0121</p></div>
+          <div class="glass-card team-card"><h3>Pakhi Mittal</h3><p>24BYB0062</p></div>
+          <div class="glass-card team-card"><h3>Priyasha Das</h3><p>24BYB0055</p></div>
+          <div class="glass-card team-card"><h3>Shubham Mishra</h3><p>24BYB0117</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Adaptive Traffic Signal Optimization System • Built with HTML, CSS & JavaScript</p>
+      <p>Designed for modern traffic analytics, responsive simulation and algorithm education.</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
